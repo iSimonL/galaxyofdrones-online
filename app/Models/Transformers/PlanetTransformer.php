@@ -27,11 +27,12 @@ class PlanetTransformer extends Transformer
             'y' => $item->y,
             'capacity' => $item->capacity,
             'supply' => $item->supply,
+            'solarion' => $item->user->solarion,
             'mining_rate' => (int) $item->mining_rate,
             'production_rate' => (int) $item->production_rate,
             'incoming_movement' => $item->incomingMovementCount(),
             'incoming_attack_movement' => $item->incomingAttackMovementCount(),
-            'outgoing_movement' => $item->outgoingMovements()->count(),
+            'outgoing_movement' => $item->outgoingMovementCount(),
             'outgoing_attack_movement' => $item->outgoingAttackMovementCount(),
             'construction' => $item->constructions()->count(),
             'upgrade' => $item->upgrades()->count(),
@@ -78,13 +79,20 @@ class PlanetTransformer extends Transformer
 
         return Resource::newModelInstance()
             ->findAllOrderBySortOrder()
-            ->transform(function (Resource $resource) use ($stocks) {
+            ->transform(function (Resource $resource) use ($planet, $stocks) {
+                $userResource = $planet->isCapital()
+                    ? $planet->user->resources->firstWhere('id', $resource->id)
+                    : null;
+
                 return [
                     'id' => $resource->id,
                     'name' => $resource->translation('name'),
                     'description' => $resource->translation('description'),
                     'quantity' => $stocks->has($resource->id)
                         ? $stocks->get($resource->id)->quantity
+                        : 0,
+                    'storage' => $userResource
+                        ? $userResource->pivot->quantity
                         : 0,
                 ];
             });
@@ -103,7 +111,11 @@ class PlanetTransformer extends Transformer
 
         return Unit::newModelInstance()
             ->findAllOrderBySortOrder()
-            ->transform(function (Unit $unit) use ($populations) {
+            ->transform(function (Unit $unit) use ($planet, $populations) {
+                $userUnit = $planet->isCapital()
+                    ? $planet->user->units->firstWhere('id', $unit->id)
+                    : null;
+
                 return [
                     'id' => $unit->id,
                     'name' => $unit->translation('name'),
@@ -113,6 +125,9 @@ class PlanetTransformer extends Transformer
                     'capacity' => $unit->capacity,
                     'quantity' => $populations->has($unit->id)
                         ? $populations->get($unit->id)->quantity
+                        : 0,
+                    'storage' => $userUnit
+                        ? $userUnit->pivot->quantity
                         : 0,
                 ];
             });

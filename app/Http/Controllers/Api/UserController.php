@@ -9,6 +9,7 @@ use Koodilab\Models\Planet;
 use Koodilab\Models\Transformers\UserCapitalTransformer;
 use Koodilab\Models\Transformers\UserShowTransformer;
 use Koodilab\Models\Transformers\UserTransformer;
+use Koodilab\Models\Transformers\UserTrophyTransformer;
 use Koodilab\Models\User;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
@@ -52,16 +53,30 @@ class UserController extends Controller
     }
 
     /**
-     * Show the trophy in json format.
+     * Show the trophy PvE in json format.
      *
-     * @param UserShowTransformer $transformer
+     * @param UserTrophyTransformer $transformer
      *
      * @return mixed|\Illuminate\Http\JsonResponse
      */
-    public function trophy(UserShowTransformer $transformer)
+    public function trophyPve(UserTrophyTransformer $transformer)
     {
         return $transformer->transformCollection(
-            User::paginateAllStartedOrderByExperience()
+            User::paginateAllStartedOrderByPve()
+        );
+    }
+
+    /**
+     * Show the trophy PvP in json format.
+     *
+     * @param UserTrophyTransformer $transformer
+     *
+     * @return mixed|\Illuminate\Http\JsonResponse
+     */
+    public function trophyPvp(UserTrophyTransformer $transformer)
+    {
+        return $transformer->transformCollection(
+            User::paginateAllStartedOrderByPvp()
         );
     }
 
@@ -75,7 +90,7 @@ class UserController extends Controller
      */
     public function show(User $user, UserShowTransformer $transformer)
     {
-        if (!$user->isStarted()) {
+        if (! $user->isStarted()) {
             throw new BadRequestHttpException();
         }
 
@@ -107,14 +122,15 @@ class UserController extends Controller
     {
         $this->authorize('friendly', $planet);
 
-        /** @var \Koodilab\Models\User $user */
-        $user = auth()->user();
-
-        if (!$user->isCapitalChangeable()) {
+        if (! $planet->user->canChangeCapital()) {
             throw new BadRequestHttpException();
         }
 
-        $user->update([
+        if ($planet->user->capital->incomingCapitalMovementCount()) {
+            throw new BadRequestHttpException();
+        }
+
+        $planet->user->update([
             'capital_id' => $planet->id,
         ]);
     }
@@ -130,7 +146,7 @@ class UserController extends Controller
     {
         $this->authorize('friendly', $planet);
 
-        auth()->user()->update([
+        $planet->user->update([
             'current_id' => $planet->id,
         ]);
     }

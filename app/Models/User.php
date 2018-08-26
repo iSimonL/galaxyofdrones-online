@@ -3,9 +3,8 @@
 namespace Koodilab\Models;
 
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 use Koodilab\Events\UserUpdated;
 use Koodilab\Support\Util;
 use Laravel\Passport\HasApiTokens;
@@ -13,45 +12,50 @@ use Laravel\Passport\HasApiTokens;
 /**
  * User.
  *
- * @property int $id
- * @property int|null $capital_id
- * @property int|null $current_id
- * @property string $username
- * @property string $email
- * @property string $password
- * @property string|null $remember_token
- * @property bool $is_enabled
- * @property int $role
- * @property int $energy
- * @property int $experience
- * @property int $production_rate
- * @property \Carbon\Carbon|null $last_login
- * @property \Carbon\Carbon|null $last_capital_changed
- * @property \Carbon\Carbon|null $last_energy_changed
- * @property \Carbon\Carbon|null $started_at
- * @property \Carbon\Carbon|null $created_at
- * @property \Carbon\Carbon|null $updated_at
- * @property \Illuminate\Database\Eloquent\Collection|BattleLog[] $attackBattleLogs
- * @property \Illuminate\Database\Eloquent\Collection|Bookmark[] $bookmarks
- * @property Planet|null $capital
- * @property \Illuminate\Database\Eloquent\Collection|\Laravel\Passport\Client[] $clients
- * @property Planet|null $current
- * @property \Illuminate\Database\Eloquent\Collection|BattleLog[] $defenseBattleLogs
- * @property int $capital_change_remaining
- * @property int $level
- * @property int $level_experience
- * @property int $next_level
- * @property int $next_level_experience
- * @property \Illuminate\Database\Eloquent\Collection|MissionLog[] $missionLogs
- * @property \Illuminate\Database\Eloquent\Collection|Movement[] $movements
+ * @property int                                                                                                       $id
+ * @property int|null                                                                                                  $capital_id
+ * @property int|null                                                                                                  $current_id
+ * @property string                                                                                                    $username
+ * @property string                                                                                                    $email
+ * @property string                                                                                                    $password
+ * @property string|null                                                                                               $remember_token
+ * @property bool                                                                                                      $is_enabled
+ * @property int                                                                                                       $energy
+ * @property int                                                                                                       $solarion
+ * @property int                                                                                                       $experience
+ * @property int                                                                                                       $production_rate
+ * @property \Carbon\Carbon|null                                                                                       $last_login
+ * @property \Carbon\Carbon|null                                                                                       $last_capital_changed
+ * @property \Carbon\Carbon|null                                                                                       $last_energy_changed
+ * @property \Carbon\Carbon|null                                                                                       $started_at
+ * @property \Carbon\Carbon|null                                                                                       $created_at
+ * @property \Carbon\Carbon|null                                                                                       $updated_at
+ * @property \Illuminate\Database\Eloquent\Collection|BattleLog[]                                                      $attackBattleLogs
+ * @property \Illuminate\Database\Eloquent\Collection|Block[]                                                          $blocks
+ * @property \Illuminate\Database\Eloquent\Collection|Bookmark[]                                                       $bookmarks
+ * @property Planet|null                                                                                               $capital
+ * @property \Illuminate\Database\Eloquent\Collection|\Laravel\Passport\Client[]                                       $clients
+ * @property Planet|null                                                                                               $current
+ * @property \Illuminate\Database\Eloquent\Collection|BattleLog[]                                                      $defenseBattleLogs
+ * @property \Illuminate\Database\Eloquent\Collection|ExpeditionLog[]                                                  $expeditionLogs
+ * @property \Illuminate\Database\Eloquent\Collection|Expedition[]                                                     $expeditions
+ * @property int                                                                                                       $capital_change_remaining
+ * @property int                                                                                                       $level
+ * @property int                                                                                                       $level_experience
+ * @property int                                                                                                       $next_level
+ * @property int                                                                                                       $next_level_experience
+ * @property \Illuminate\Database\Eloquent\Collection|Message[]                                                        $messages
+ * @property \Illuminate\Database\Eloquent\Collection|MissionLog[]                                                     $missionLogs
+ * @property \Illuminate\Database\Eloquent\Collection|Mission[]                                                        $missions
+ * @property \Illuminate\Database\Eloquent\Collection|Movement[]                                                       $movements
  * @property \Illuminate\Notifications\DatabaseNotificationCollection|\Illuminate\Notifications\DatabaseNotification[] $notifications
- * @property \Illuminate\Database\Eloquent\Collection|Planet[] $planets
- * @property \Illuminate\Database\Eloquent\Collection|Research[] $researches
- * @property \Illuminate\Database\Eloquent\Collection|resource[] $resources
- * @property \Illuminate\Database\Eloquent\Collection|\Laravel\Passport\Token[] $tokens
- * @property \Illuminate\Database\Eloquent\Collection|Unit[] $units
+ * @property \Illuminate\Database\Eloquent\Collection|Planet[]                                                         $planets
+ * @property \Illuminate\Database\Eloquent\Collection|Research[]                                                       $researches
+ * @property \Illuminate\Database\Eloquent\Collection|resource[]                                                       $resources
+ * @property \Illuminate\Database\Eloquent\Collection|Shield[]                                                         $shields
+ * @property \Illuminate\Database\Eloquent\Collection|\Laravel\Passport\Token[]                                        $tokens
+ * @property \Illuminate\Database\Eloquent\Collection|Unit[]                                                           $units
  *
- * @method static \Illuminate\Database\Eloquent\Builder|User dashboard()
  * @method static \Illuminate\Database\Eloquent\Builder|User whereCapitalId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereCurrentId($value)
@@ -66,7 +70,7 @@ use Laravel\Passport\HasApiTokens;
  * @method static \Illuminate\Database\Eloquent\Builder|User wherePassword($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereProductionRate($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereRememberToken($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereRole($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereSolarion($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereStartedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereUsername($value)
@@ -81,59 +85,48 @@ class User extends Authenticatable
         Concerns\HasEnergy,
         Concerns\HasExperience,
         Concerns\HasResearchable,
+        Concerns\HasSolarion,
         Queries\FindAvailableResource,
         Queries\FindAvailableUnits,
+        Queries\FindByBlocked,
         Queries\FindByIdOrUsername,
+        Queries\FindByUsername,
+        Queries\FindExpeditionStar,
+        Queries\FindIncomingUserAttackMovements,
         Queries\FindMissionResources,
+        Queries\FindNotExpiredExpeditions,
+        Queries\FindNotExpiredMissions,
+        Queries\FindNotExpiredShields,
         Queries\FindPlanetsOrderByName,
-        Queries\FindResourcesOrderBySortOrder,
+        Queries\FindResearchedResources,
         Queries\FindUnitsOrderBySortOrder,
+        Queries\IncomingUserAttackMovementCount,
         Queries\LosingBattleLogCount,
         Queries\WinningBattleLogCount,
-        Queries\PaginateAllStartedOrderByExperience,
+        Queries\PaginateAllStartedOrderByPve,
+        Queries\PaginateAllStartedOrderByPvp,
         Queries\PaginateBattleLogs,
+        Queries\PaginateExpeditionLogs,
+        Queries\PaginateMessages,
         Queries\PaginateMissionLogs,
-        Relations\BelongsToManyResource,
-        Relations\BelongsToManyUnit,
+        Queries\PaginatePlanets,
+        Relations\HasManyBlock,
         Relations\HasManyBookmark,
         Relations\HasManyPlanet,
         Relations\HasManyMovement,
         Relations\HasManyResearch,
-        Relations\HasManyMissionLog;
-
-    /**
-     * The user role.
-     *
-     * @var int
-     */
-    const ROLE_USER = 0;
-
-    /**
-     * The administrator role.
-     *
-     * @var int
-     */
-    const ROLE_ADMIN = 1;
-
-    /**
-     * The super admin role.
-     *
-     * @var int
-     */
-    const ROLE_SUPER_ADMIN = 2;
-
-    /**
-     * {@inheritdoc}
-     */
-    protected $perPage = 30;
+        Relations\HasManyMission,
+        Relations\HasManyMissionLog,
+        Relations\HasManyExpedition,
+        Relations\HasManyExpeditionLog;
 
     /**
      * {@inheritdoc}
      */
     protected $attributes = [
         'is_enabled' => true,
-        'role' => self::ROLE_USER,
         'energy' => 1000,
+        'solarion' => 0,
         'experience' => 0,
         'production_rate' => 0,
     ];
@@ -165,76 +158,6 @@ class User extends Authenticatable
     protected $casts = [
         'is_enabled' => 'bool',
     ];
-
-    /**
-     * {@inheritdoc}
-     */
-    protected static function boot()
-    {
-        parent::boot();
-
-        static::saving(function (self $user) {
-            if ($user->isDirty('capital_id')) {
-                $user->last_capital_changed = Carbon::now();
-            }
-        });
-
-        static::deleting(function (self $user) {
-            if (auth()->id() != $user->getKey()) {
-                $user->planets->each->update([
-                    'user_id' => null,
-                ]);
-
-                return true;
-            }
-
-            return false;
-        });
-
-        static::updated(function (self $user) {
-            event(
-                new UserUpdated($user->id)
-            );
-        });
-    }
-
-    /**
-     * Get the role options.
-     *
-     * @return array
-     */
-    public static function roleOptions()
-    {
-        return [
-            static::ROLE_USER => 'messages.user.singular',
-            static::ROLE_ADMIN => 'messages.admin',
-            static::ROLE_SUPER_ADMIN => 'messages.super_admin',
-        ];
-    }
-
-    /**
-     * Get the dashboard roles.
-     *
-     * @return array
-     */
-    public static function dashboardRoles()
-    {
-        return [
-            static::ROLE_ADMIN, static::ROLE_SUPER_ADMIN,
-        ];
-    }
-
-    /**
-     * Dashboard scope.
-     *
-     * @param Builder $query
-     *
-     * @return Builder
-     */
-    public function scopeDashboard(Builder $query)
-    {
-        return $query->whereIn('role', static::dashboardRoles());
-    }
 
     /**
      * Get the capital.
@@ -277,13 +200,57 @@ class User extends Authenticatable
     }
 
     /**
+     * Get the shields.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasManyThrough
+     */
+    public function shields()
+    {
+        return $this->hasManyThrough(Shield::class, Planet::class);
+    }
+
+    /**
+     * Get the messages.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function messages()
+    {
+        return $this->hasMany(Message::class, 'recipient_id');
+    }
+
+    /**
+     * Get the resources.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function resources()
+    {
+        return $this->belongsToMany(Resource::class)
+            ->withPivot('is_researched', 'quantity')
+            ->withTimestamps();
+    }
+
+    /**
+     * Get the units.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function units()
+    {
+        return $this->belongsToMany(Unit::class)
+            ->withPivot('is_researched', 'quantity')
+            ->withTimestamps();
+    }
+
+    /**
      * Set the password attribute.
      *
      * @param string $value
      */
     public function setPasswordAttribute($value)
     {
-        if (!empty($value)) {
+        if (! empty($value)) {
             $this->attributes['password'] = bcrypt($value);
         }
     }
@@ -295,49 +262,7 @@ class User extends Authenticatable
      */
     public function isStarted()
     {
-        return !empty($this->started_at);
-    }
-
-    /**
-     * Is admin?
-     *
-     * @return bool
-     */
-    public function isAdmin()
-    {
-        return $this->role == static::ROLE_ADMIN;
-    }
-
-    /**
-     * Is super admin?
-     *
-     * @return bool
-     */
-    public function isSuperAdmin()
-    {
-        return $this->role == static::ROLE_SUPER_ADMIN;
-    }
-
-    /**
-     * Can give this role?
-     *
-     * @param string $role
-     *
-     * @return bool
-     */
-    public function canGiveRole($role)
-    {
-        return $this->role >= $role;
-    }
-
-    /**
-     * Can use dashboard?
-     *
-     * @return bool
-     */
-    public function canUseDashboard()
-    {
-        return in_array($this->role, static::dashboardRoles());
+        return ! empty($this->started_at);
     }
 
     /**
@@ -382,5 +307,37 @@ class User extends Authenticatable
                 new UserUpdated($this->id)
             );
         }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::saving(function (self $user) {
+            if ($user->isDirty('capital_id')) {
+                $user->last_capital_changed = Carbon::now();
+            }
+        });
+
+        static::deleting(function (self $user) {
+            if (auth()->id() != $user->getKey()) {
+                $user->planets->each->update([
+                    'user_id' => null,
+                ]);
+
+                return true;
+            }
+
+            return false;
+        });
+
+        static::updated(function (self $user) {
+            event(
+                new UserUpdated($user->id)
+            );
+        });
     }
 }

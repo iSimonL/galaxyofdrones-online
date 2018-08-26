@@ -3,19 +3,18 @@
 namespace Koodilab\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Koodilab\Notifications\MissionLogCreated;
 
 /**
  * Mission log.
  *
- * @property int $id
- * @property int $user_id
- * @property int $energy
- * @property int $experience
- * @property \Carbon\Carbon|null $created_at
- * @property \Carbon\Carbon|null $updated_at
+ * @property int                                                 $id
+ * @property int                                                 $user_id
+ * @property int                                                 $energy
+ * @property int                                                 $experience
+ * @property \Carbon\Carbon|null                                 $created_at
+ * @property \Carbon\Carbon|null                                 $updated_at
  * @property \Illuminate\Database\Eloquent\Collection|resource[] $resources
- * @property User $user
+ * @property User                                                $user
  *
  * @method static \Illuminate\Database\Eloquent\Builder|MissionLog whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|MissionLog whereEnergy($value)
@@ -32,42 +31,9 @@ class MissionLog extends Model
     /**
      * {@inheritdoc}
      */
-    protected $perPage = 30;
-
-    /**
-     * {@inheritdoc}
-     */
     protected $guarded = [
         'id', 'created_at', 'updated_at',
     ];
-
-    /**
-     * Create from.
-     *
-     * @param Mission $mission
-     *
-     * @return MissionLog
-     */
-    public static function createFrom(Mission $mission)
-    {
-        $missionLog = static::create([
-            'user_id' => $mission->planet->user_id,
-            'energy' => $mission->energy,
-            'experience' => $mission->experience,
-        ]);
-
-        foreach ($mission->resources as $resource) {
-            $missionLog->resources()->attach($resource->id, [
-                'quantity' => $resource->pivot->quantity,
-            ]);
-        }
-
-        $missionLog->user->notify(
-            new MissionLogCreated($missionLog->id)
-        );
-
-        return $missionLog;
-    }
 
     /**
      * Get the resources.

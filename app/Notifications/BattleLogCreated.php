@@ -21,7 +21,7 @@ class BattleLogCreated extends Notification
      *
      * @param int $battleLogId
      */
-    public function __construct($battleLogId)
+    public function __construct(int $battleLogId)
     {
         $this->battleLogId = $battleLogId;
     }

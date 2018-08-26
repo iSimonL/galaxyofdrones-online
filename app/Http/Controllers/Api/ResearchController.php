@@ -3,8 +3,8 @@
 namespace Koodilab\Http\Controllers\Api;
 
 use Illuminate\Support\Facades\DB;
+use Koodilab\Game\ResearchManager;
 use Koodilab\Http\Controllers\Controller;
-use Koodilab\Models\Research;
 use Koodilab\Models\Transformers\ResourceAvailableTransformer;
 use Koodilab\Models\Transformers\UnitAvailableTransformer;
 use Koodilab\Models\Unit;
@@ -49,16 +49,18 @@ class ResearchController extends Controller
     /**
      * Store a newly created research in storage.
      *
+     * @param ResearchManager $manager
+     *
      * @return mixed|\Illuminate\Http\Response
      */
-    public function storeResource()
+    public function storeResource(ResearchManager $manager)
     {
         /** @var \Koodilab\Models\User $user */
         $user = auth()->user();
 
         $resource = $user->findAvailableResource();
 
-        if (!$resource) {
+        if (! $resource) {
             throw new BadRequestHttpException();
         }
 
@@ -66,30 +68,31 @@ class ResearchController extends Controller
             throw new BadRequestHttpException();
         }
 
-        if (!$user->hasEnergy($resource->research_cost)) {
+        if (! $user->hasEnergy($resource->research_cost)) {
             throw new BadRequestHttpException();
         }
 
-        DB::transaction(function () use ($resource) {
-            Research::createFrom($resource);
+        DB::transaction(function () use ($resource, $manager) {
+            $manager->create($resource);
         });
     }
 
     /**
      * Store a newly created research in storage.
      *
-     * @param Unit $unit
+     * @param Unit            $unit
+     * @param ResearchManager $manager
      *
      * @return mixed|\Illuminate\Http\Response
      */
-    public function storeUnit(Unit $unit)
+    public function storeUnit(Unit $unit, ResearchManager $manager)
     {
         /** @var \Koodilab\Models\User $user */
         $user = auth()->user();
 
         $units = $user->findAvailableUnits();
 
-        if (!$units->contains($unit)) {
+        if (! $units->contains($unit)) {
             throw new BadRequestHttpException();
         }
 
@@ -97,61 +100,64 @@ class ResearchController extends Controller
             throw new BadRequestHttpException();
         }
 
-        if (!$user->hasEnergy($unit->research_cost)) {
+        if (! $user->hasEnergy($unit->research_cost)) {
             throw new BadRequestHttpException();
         }
 
-        DB::transaction(function () use ($unit) {
-            Research::createFrom($unit);
+        DB::transaction(function () use ($unit, $manager) {
+            $manager->create($unit);
         });
     }
 
     /**
      * Remove the research from storage.
      *
+     * @param ResearchManager $manager
+     *
      * @return mixed|\Illuminate\Http\Response
      */
-    public function destroyResource()
+    public function destroyResource(ResearchManager $manager)
     {
         /** @var \Koodilab\Models\User $user */
         $user = auth()->user();
 
         $resource = $user->findAvailableResource();
 
-        if (!$resource) {
+        if (! $resource) {
             throw new BadRequestHttpException();
         }
 
         $research = $resource->findResearchByUser($user);
 
-        if (!$research) {
+        if (! $research) {
             throw new BadRequestHttpException();
         }
 
-        DB::transaction(function () use ($research) {
-            $research->cancel();
+        DB::transaction(function () use ($research, $manager) {
+            $manager->cancel($research);
         });
     }
 
     /**
      * Remove the research from storage.
      *
-     * @param Unit $unit
+     * @param Unit            $unit
+     * @param ResearchManager $manager
      *
      * @return mixed|\Illuminate\Http\Response
      */
-    public function destroyUnit(Unit $unit)
+    public function destroyUnit(Unit $unit, ResearchManager $manager)
     {
         $research = $unit->findResearchByUser(
             auth()->user()
         );
 
-        if (!$research) {
+        if (! $research) {
             throw new BadRequestHttpException();
         }
 
-        DB::transaction(function () use ($research) {
-            $research->cancel();
+        DB::transaction(function () use ($research, $manager) {
+            $manager->cancel($research);
         });
     }
 }

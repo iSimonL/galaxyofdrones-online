@@ -28,6 +28,44 @@ $router->group([
     });
 
     $router->group([
+        'prefix' => 'shield',
+    ], function () use ($router) {
+        $router->get('/', 'ShieldController@index')
+            ->name('shield');
+
+        $router->post('{planet}', 'ShieldController@store')
+            ->name('shield_store')
+            ->where('planet', '\d+');
+    });
+
+    $router->group([
+        'prefix' => 'monitor',
+    ], function () use ($router) {
+        $router->get('/', 'MonitorController@index')
+            ->name('monitor');
+
+        $router->get('show', 'MonitorController@show')
+            ->name('monitor_show');
+    });
+
+    $router->group([
+        'prefix' => 'block',
+    ], function () use ($router) {
+        $router->put('{user}', 'BlockController@update')
+            ->name('block_update');
+    });
+
+    $router->group([
+        'prefix' => 'message',
+    ], function () use ($router) {
+        $router->get('/', 'MessageController@index')
+            ->name('message');
+
+        $router->post('/', 'MessageController@store')
+            ->name('message_store');
+    });
+
+    $router->group([
         'prefix' => 'construction',
     ], function () use ($router) {
         $router->get('{grid}', 'ConstructionController@index')
@@ -49,6 +87,12 @@ $router->group([
     ], function () use ($router) {
         $router->get('/', 'PlanetController@index')
             ->name('planet');
+
+        $router->get('all/{user}', 'PlanetController@all')
+            ->name('planet_all');
+
+        $router->get('capital', 'PlanetController@capital')
+            ->name('planet_capital');
 
         $router->get('{planet}', 'PlanetController@show')
             ->name('planet_show')
@@ -101,6 +145,35 @@ $router->group([
     });
 
     $router->group([
+        'prefix' => 'expedition',
+    ], function () use ($router) {
+        $router->get('/', 'ExpeditionController@index')
+            ->name('expedition');
+
+        $router->post('{expedition}', 'ExpeditionController@store')
+            ->name('expedition_store')
+            ->where('expedition', '\d+');
+    });
+
+    $router->group([
+        'prefix' => 'expedition-log',
+    ], function () use ($router) {
+        $router->get('/', 'ExpeditionLogController@index')
+            ->name('expedition_log');
+    });
+
+    $router->group([
+        'prefix' => 'mission',
+    ], function () use ($router) {
+        $router->get('/', 'MissionController@index')
+            ->name('mission');
+
+        $router->post('{mission}', 'MissionController@store')
+            ->name('mission_store')
+            ->where('mission', '\d+');
+    });
+
+    $router->group([
         'prefix' => 'mission-log',
     ], function () use ($router) {
         $router->get('/', 'MissionLogController@index')
@@ -129,6 +202,14 @@ $router->group([
         $router->post('transport/{planet}', 'MovementController@storeTransport')
             ->name('movement_transport_store')
             ->where('planet', '\d+');
+
+        $router->post('trade/{grid}', 'MovementController@storeTrade')
+            ->name('movement_trade_store')
+            ->where('grid', '\d+');
+
+        $router->post('patrol/{grid}', 'MovementController@storePatrol')
+            ->name('movement_patrol_store')
+            ->where('grid', '\d+');
     });
 
     $router->group([
@@ -165,19 +246,6 @@ $router->group([
         ->where('grid', '\d+');
 
     $router->group([
-        'prefix' => 'trader',
-    ], function () use ($router) {
-        $router->get('{grid}', 'TraderController@index')
-            ->name('trader')
-            ->where('grid', '\d+');
-
-        $router->post('{grid}/{mission}', 'TraderController@store')
-            ->name('trader_store')
-            ->where('grid', '\d+')
-            ->where('mission', '\d+');
-    });
-
-    $router->group([
         'prefix' => 'trainer',
     ], function () use ($router) {
         $router->get('{grid}', 'TrainerController@index')
@@ -203,8 +271,11 @@ $router->group([
         $router->get('capital', 'UserController@capital')
             ->name('user_capital');
 
-        $router->get('trophy', 'UserController@trophy')
-            ->name('user_trophy');
+        $router->get('trophy/pve', 'UserController@trophyPve')
+            ->name('user_trophy_pve');
+
+        $router->get('trophy/pvp', 'UserController@trophyPvp')
+            ->name('user_trophy_pvp');
 
         $router->get('{user}', 'UserController@show')
             ->name('user_show');

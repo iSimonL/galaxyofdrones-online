@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 use Kalnoy\Nestedset\NestedSet;
 
 class CreateBuildingsTable extends Migration
@@ -29,9 +29,9 @@ class CreateBuildingsTable extends Migration
             $table->integer('supply')->unsigned()->nullable();
             $table->integer('mining_rate')->unsigned()->nullable();
             $table->integer('production_rate')->unsigned()->nullable();
-            $table->integer('mission_time')->unsigned()->nullable();
             $table->double('defense_bonus')->unsigned()->nullable();
             $table->double('construction_time_bonus')->unsigned()->nullable();
+            $table->double('trade_time_bonus')->unsigned()->nullable();
             $table->double('train_time_bonus')->unsigned()->nullable();
             $table->timestamps();
         });

@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CreateMissionsTable extends Migration
 {
@@ -14,10 +14,10 @@ class CreateMissionsTable extends Migration
         Schema::create('missions', function (Blueprint $table) {
             $table->bigIncrements('id');
 
-            $table->integer('planet_id')->unsigned();
-            $table->foreign('planet_id')
+            $table->integer('user_id')->unsigned();
+            $table->foreign('user_id')
                 ->references('id')
-                ->on('planets')
+                ->on('users')
                 ->onDelete('cascade');
 
             $table->integer('energy')->unsigned();

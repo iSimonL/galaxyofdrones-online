@@ -1,0 +1,33 @@
+<trophy inline-template>
+    <div class="trophy modal fade" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                        &times;
+                    </button>
+                    <h4 class="modal-title">
+                        {{ trans('messages.trophy') }}
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <ul class="nav nav-tabs nav-justified">
+                        <li :class="{active: isSelectedTab('pve')}">
+                            <a href="#" @click.prevent="selectTab('pve')">
+                                {{ trans('messages.pve') }}
+                            </a>
+                        </li>
+                        <li :class="{active: isSelectedTab('pvp')}">
+                            <a href="#" @click.prevent="selectTab('pvp')">
+                                {{ trans('messages.pvp') }}
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                {% include 'partials.pve' %}
+                {% include 'partials.pvp' %}
+            </div>
+        </div>
+    </div>
+</trophy>

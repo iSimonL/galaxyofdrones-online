@@ -9,8 +9,10 @@ use Koodilab\Http\Controllers\Controller;
 use Koodilab\Models\Building;
 use Koodilab\Models\Grid;
 use Koodilab\Models\Planet;
+use Koodilab\Models\Transformers\PlanetAllTransformer;
 use Koodilab\Models\Transformers\PlanetShowTransformer;
 use Koodilab\Models\Transformers\PlanetTransformer;
+use Koodilab\Models\User;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class PlanetController extends Controller
@@ -39,6 +41,35 @@ class PlanetController extends Controller
     }
 
     /**
+     * Show the all planet in json format.
+     *
+     * @param User                 $user
+     * @param PlanetAllTransformer $transformer
+     *
+     * @return mixed|\Illuminate\Http\JsonResponse
+     */
+    public function all(User $user, PlanetAllTransformer $transformer)
+    {
+        return $transformer->transformCollection(
+            $user->paginatePlanets()
+        );
+    }
+
+    /**
+     * Show the capital planet in json format.
+     *
+     * @param PlanetShowTransformer $transformer
+     *
+     * @return mixed|\Illuminate\Http\JsonResponse
+     */
+    public function capital(PlanetShowTransformer $transformer)
+    {
+        return $transformer->transform(
+            auth()->user()->capital
+        );
+    }
+
+    /**
      * Show the planet in json format.
      *
      * @param Planet                $planet
@@ -56,12 +87,12 @@ class PlanetController extends Controller
      *
      * @param Request $request
      *
-     * @return \Illuminate\Http\Response
+     * @return mixed|\Illuminate\Http\Response
      */
     public function updateName(Request $request)
     {
-        if (!$request->has('name')) {
-            return response('Bad Request.', 400);
+        if (! $request->has('name')) {
+            throw new BadRequestHttpException();
         }
 
         auth()->user()->current->update([
@@ -80,7 +111,7 @@ class PlanetController extends Controller
     {
         $this->authorize('friendly', $grid->planet);
 
-        if (!$grid->building_id) {
+        if (! $grid->building_id) {
             throw new BadRequestHttpException();
         }
 

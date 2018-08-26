@@ -2,16 +2,14 @@
 
 namespace Koodilab\Models\Transformers;
 
-use Koodilab\Models\Movement;
 use Koodilab\Models\Planet;
-use Koodilab\Models\Unit;
 
 class MovementTransformer extends Transformer
 {
     /**
      * {@inheritdoc}
      *
-     * @param Movement $item
+     * @param \Koodilab\Models\Movement $item
      */
     public function transform($item)
     {
@@ -21,7 +19,6 @@ class MovementTransformer extends Transformer
             'remaining' => $item->remaining,
             'start' => $this->planet($item->start),
             'end' => $this->planet($item->end),
-            'units' => $this->units($item),
         ];
     }
 
@@ -38,26 +35,8 @@ class MovementTransformer extends Transformer
             'id' => $planet->id,
             'resource_id' => $planet->resource_id,
             'display_name' => $planet->display_name,
+            'x' => $planet->x,
+            'y' => $planet->y,
         ];
-    }
-
-    /**
-     * Get the units.
-     *
-     * @param Movement $item
-     *
-     * @return array
-     */
-    protected function units(Movement $item)
-    {
-        return $item->findUnitsOrderBySortOrder()
-            ->transform(function (Unit $unit) {
-                return [
-                    'id' => $unit->id,
-                    'name' => $unit->translation('name'),
-                    'description' => $unit->translation('description'),
-                    'quantity' => $unit->pivot->quantity,
-                ];
-            });
     }
 }

@@ -2,35 +2,29 @@
 
 return [
 
-    'admin' => 'Admin',
+    'armory' => 'Armory',
+    'cargo' => 'Cargo',
     'cancel' => 'Cancel',
-    'create' => 'Create',
+    'complete' => 'Complete',
     'delete' => 'Delete',
     'demolish' => 'Demolish',
-    'edit' => 'Edit',
     'energy' => 'Energy',
-    'failed_job' => 'Failed job',
     'free' => 'Free',
-    'generate' => 'Generate',
-    'home' => 'Home',
     'info' => 'Info',
     'instant' => 'Instant',
+    'laboratory' => 'Laboratory',
     'mailbox' => 'Mailbox',
     'move' => 'Move',
-    'no' => 'No',
-    'no_items' => 'No items.',
     'owner' => 'Owner',
-    'overview' => 'Overview',
-    'refresh' => 'Refresh',
+    'pve' => 'PvE',
+    'pvp' => 'PvP',
+    'radar' => 'Radar',
     'required_quantity' => 'Required quantity',
     'save' => 'Save',
-    'search' => 'Search',
     'starmap' => 'Starmap',
     'start' => 'Start',
-    'super_admin' => 'Super admin',
     'transmute' => 'Transmute',
     'trophy' => 'Trophy',
-    'yes' => 'Yes',
     'zoom_in' => 'Zoom in',
     'zoom_out' => 'Zoom out',
 
@@ -40,7 +34,6 @@ return [
         'email' => 'Send Password Reset Link',
         'forgot' => 'Forgot your password?',
         'login' => 'Login',
-        'logout' => 'Logout',
         'register' => 'Register',
         'reset' => 'Reset Password',
     ],
@@ -54,6 +47,11 @@ return [
         'empty' => 'No bookmarks.',
         'plural' => 'Bookmarks',
         'star' => 'Bookmark this star',
+    ],
+
+    'block' => [
+        'singular' => 'Block',
+        'unblock' => 'Unblock',
     ],
 
     'building' => [
@@ -75,12 +73,25 @@ return [
         'wrong' => 'Something went wrong.',
     ],
 
-    'help' => [
-        'username' => 'English alphabet, numbers, dot, dash and underscore.',
+    'expedition' => [
+        'empty' => 'No expeditions.',
+        'star' => 'Show expedition',
+    ],
+
+    'expedition_log' => [
+        'empty' => 'No expedition logs.',
+        'plural' => 'Expedition logs',
+    ],
+
+    'message' => [
+        'empty' => 'No messages.',
+        'plural' => 'Messages',
+        'reply' => 'Reply',
+        'send' => 'Send message',
+        'singular' => 'Message',
     ],
 
     'mission' => [
-        'complete' => 'Complete',
         'empty' => 'No missions.',
     ],
 
@@ -100,16 +111,15 @@ return [
         'empty' => 'No movements.',
         'occupy' => 'Occupy',
         'scout' => 'Scout',
-        'singular' => 'Movement',
         'support' => 'Support',
         'transport' => 'Transport',
     ],
 
     'planet' => [
+        'change' => 'Change planet',
         'free' => 'Only one planet is free.|Only :count planets are free.',
         'first' => 'Get my first planet',
         'jump' => 'Jump to surface',
-        'singular' => 'Planet',
     ],
 
     'profile' => [
@@ -125,36 +135,37 @@ return [
     'resource' => [
         'count' => 'Resource count',
         'plural' => 'Resources',
-    ],
-
-    'result' => [
-        'show' => 'Results:',
-        'total' => 'Total:',
+        'singular' => 'Resource',
     ],
 
     'setting' => [
-        'edit' => 'Edit settings',
         'plural' => 'Settings',
     ],
 
-    'star' => [
-        'singular' => 'Star',
+    'shield' => [
+        'add' => 'Add shield',
+        'empty' => 'No shields.',
+        'singular' => 'Shield',
+        'time' => '{1} You can add :value hour shield with|[2,*] You can add :value hours shield with',
+    ],
+
+    'solarion' => [
+        'name' => 'Solarion',
+        'description' => 'Found on the stars.',
     ],
 
     'success' => [
-        'create' => 'Created successfully.',
         'logout' => 'Logout successful.',
         'singular' => 'Success',
-        'update' => 'Updated successfully.',
     ],
 
     'training' => [
-        'singular' => 'Training',
         'train' => 'Train',
     ],
 
     'unit' => [
         'plural' => 'Units',
+        'singular' => 'Unit',
     ],
 
     'upgrade' => [
@@ -162,20 +173,19 @@ return [
     ],
 
     'user' => [
-        'create' => 'New user',
-        'edit' => 'Edit user',
         'empty' => 'No users.',
         'joined' => 'Joined the battle :datetime.',
-        'plural' => 'Users',
-        'singular' => 'User',
         'username_with_level' => ':username (Level :level)',
     ],
 
     'warning' => [
-        'delete_selected' => 'Are you sure you want to delete the selected items?',
         'demolish_building' => 'Are you sure you want to demolish the selected building?',
         'lose_planet' => 'If it is the Command Center, you will lose the planet.',
         'server' => 'Sorry, the server is full :(',
+    ],
+
+    'whats_new' => [
+        'title' => "What's new",
     ],
 
 ];

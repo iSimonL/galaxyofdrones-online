@@ -1,0 +1,19 @@
+{% extends 'layouts.main' %}
+
+{% block body %}
+    <section id="app" class="container-app">
+        {% include 'partials.sidebar' %}
+        {% include 'partials.player' %}
+        {% include 'partials.monitor' %}
+
+        {% block content %}{% endblock %}
+
+        {% include 'partials.mailbox' %}
+        {% include 'partials.message' %}
+        {% include 'partials.mothership' %}
+        {% include 'partials.profile' %}
+        {% include 'partials.setting' %}
+        {% include 'partials.trophy' %}
+        {% include 'partials.whats-new' %}
+    </section>
+{% endblock %}

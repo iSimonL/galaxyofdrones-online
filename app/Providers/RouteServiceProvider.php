@@ -2,8 +2,8 @@
 
 namespace Koodilab\Providers;
 
-use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
+use Illuminate\Support\Facades\Route;
 use Koodilab\Models\User;
 
 class RouteServiceProvider extends ServiceProvider
@@ -44,10 +44,7 @@ class RouteServiceProvider extends ServiceProvider
     {
         Route::middleware('web')
             ->namespace($this->namespace)
-            ->group(function ($router) {
-                require base_path('routes/admin.php');
-                require base_path('routes/site.php');
-            });
+            ->group(base_path('routes/web.php'));
     }
 
     /**

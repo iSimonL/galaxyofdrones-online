@@ -99,11 +99,7 @@ return [
     |
     */
 
-    'custom' => [
-        'attribute-name' => [
-            'rule-name' => 'custom-message',
-        ],
-    ],
+    'custom' => [],
 
     /*
     |--------------------------------------------------------------------------
@@ -137,29 +133,31 @@ return [
         'efficiency' => 'Efficiency',
         'email' => 'E-mail',
         'energy' => 'Energy',
+        'expedition' => 'Expedition',
         'experience' => 'Experience',
         'frequency' => 'Frequency',
-        'generated_password' => 'Generated password',
         'incoming' => 'Incoming',
-        'is_enabled' => 'Is enabled',
-        'last_login' => 'Last login',
         'level' => 'Level',
-        'losing_battles' => 'Losing battles',
+        'losing_battle' => 'Losing battle',
+        'message' => 'Message',
         'mining_rate' => 'Mining rate',
-        'missions' => 'Missions',
+        'mission' => 'Mission',
         'mission_time' => 'Mission time',
         'outgoing' => 'Outgoing',
         'password' => 'Password',
         'password_confirmation' => 'Password confirmation',
+        'planet' => 'Planet',
         'production_rate' => 'Production rate',
+        'recipient' => 'Recipient',
         'remember' => 'Remember me',
         'research_cost' => 'Research cost',
         'research_experience' => 'Experience',
         'research_time' => 'Research time',
-        'role' => 'Role',
         'speed' => 'Speed',
         'supply' => 'Supply',
         'title' => 'Title',
+        'trade_time' => 'Trade time',
+        'trade_time_bonus' => 'Trade time bonus',
         'training' => 'Training',
         'train_cost' => 'Train cost',
         'train_time' => 'Train time',
@@ -168,7 +166,7 @@ return [
         'upgrade' => 'Upgrade',
         'username' => 'Username',
         'username_or_email' => 'Username / E-mail',
-        'winning_battles' => 'Winning battles',
+        'winning_battle' => 'Winning battle',
     ],
 
 ];

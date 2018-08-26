@@ -7,7 +7,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Koodilab\Auth\KoodilabUserProvider;
 use Koodilab\Models\Bookmark;
-use Koodilab\Models\Building;
+use Koodilab\Models\Expedition;
+use Koodilab\Models\Mission;
 use Koodilab\Models\Planet;
 use Koodilab\Models\User;
 
@@ -18,7 +19,8 @@ class AuthServiceProvider extends ServiceProvider
      */
     protected $policies = [
         Bookmark::class => \Koodilab\Policies\BookmarkPolicy::class,
-        User::class => \Koodilab\Policies\UserPolicy::class,
+        Expedition::class => \Koodilab\Policies\ExpeditionPolicy::class,
+        Mission::class => \Koodilab\Policies\MissionPolicy::class,
     ];
 
     /**
@@ -32,16 +34,6 @@ class AuthServiceProvider extends ServiceProvider
 
         $this->registerPolicies();
 
-        Gate::before(function (User $user) {
-            if ($user->isSuperAdmin()) {
-                return true;
-            }
-        });
-
-        Gate::define('dashboard', function (User $user) {
-            return $user->canUseDashboard();
-        });
-
         Gate::define('friendly', function (User $user, Planet $planet) {
             return $user->id == $planet->user_id;
         });
@@ -50,8 +42,8 @@ class AuthServiceProvider extends ServiceProvider
             return $user->id != $planet->user_id;
         });
 
-        Gate::define('building', function (User $user, Building $building, $type) {
-            return !empty($building) && $building->type == $type;
+        Gate::define('building', function (User $user, $building, $type) {
+            return ! empty($building) && $building->type == $type;
         });
     }
 
@@ -65,8 +57,7 @@ class AuthServiceProvider extends ServiceProvider
     protected function userProvider(array $config)
     {
         return new KoodilabUserProvider(
-            $this->app->make('hash'),
-            $config['model']
+            $this->app->make('hash'), $config['model']
         );
     }
 }

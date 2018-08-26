@@ -1,0 +1,45 @@
+<mailbox inline-template>
+    <div class="mailbox modal fade" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                        &times;
+                    </button>
+                    <h4 class="modal-title">
+                        {{ trans('messages.mailbox') }}
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <ul class="nav nav-tabs nav-justified">
+                        <li :class="{active: isSelectedTab('mission-log')}">
+                            <a href="#" @click.prevent="selectTab('mission-log')">
+                                {{ trans('messages.mission_log.plural') }}
+                            </a>
+                        </li>
+                        <li :class="{active: isSelectedTab('expedition-log')}">
+                            <a href="#" @click.prevent="selectTab('expedition-log')">
+                                {{ trans('messages.expedition_log.plural') }}
+                            </a>
+                        </li>
+                        <li :class="{active: isSelectedTab('battle-log')}">
+                            <a href="#" @click.prevent="selectTab('battle-log')">
+                                {{ trans('messages.battle_log.plural') }}
+                            </a>
+                        </li>
+                        <li :class="{active: isSelectedTab('message-log')}">
+                            <a href="#" @click.prevent="selectTab('message-log')">
+                                {{ trans('messages.message.plural') }}
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                {% include 'partials.mission-log' %}
+                {% include 'partials.expedition-log' %}
+                {% include 'partials.battle-log' %}
+                {% include 'partials.message-log' %}
+            </div>
+        </div>
+    </div>
+</mailbox>

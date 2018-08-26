@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CreateUsersTable extends Migration
 {
@@ -20,8 +20,8 @@ class CreateUsersTable extends Migration
             $table->string('password');
             $table->rememberToken();
             $table->boolean('is_enabled');
-            $table->integer('role')->unsigned();
             $table->bigInteger('energy')->unsigned();
+            $table->bigInteger('solarion')->unsigned();
             $table->bigInteger('experience')->unsigned();
             $table->bigInteger('production_rate')->unsigned();
             $table->timestamp('last_login')->nullable();
